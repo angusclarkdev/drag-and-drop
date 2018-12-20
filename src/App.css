@@ -40,16 +40,20 @@
 
 .box {
   height: 180px;
-  width: 160px;
+  width: 180px;
   background-color: #fff;
-  margin: 50px;
+  margin: 25px;
 }
 
-.box-colored {
-  background-color: mediumorchid;
+.box-image {
+  background-image: url('http://source.unsplash.com/random/180x180');
   cursor: pointer;
 }
 
 .invisible {
-  background-color: blue;
+ background-color: #fff;
+}
+
+.bordered {
+  border: 1px dashed black;
 }

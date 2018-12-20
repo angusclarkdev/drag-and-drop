@@ -1,33 +1,26 @@
 import React, { Component } from 'react'
-import classnames from 'classnames'
+// import classnames from 'classnames'
 import './App.css'
 
 class App extends Component {
 
   state = {
-    dragging: false
+    dragging: false,
+    draggingOver: false
   }
 
-  boxes = [
-    { id: 1, label: 'box 1' },
-    { id: 2, label: 'box 2' },
-    { id: 3, label: 'box 3' },
-    { id: 4, label: 'box 4' },
-  ]
-
-  componentDiDMount () {
-
+  handleDragStart = () => {
+    setTimeout(() => {
+      this.setState({ dragging: true, draggingOver: true })
+    }, 10)
   }
-  handleDragStart = (e, id) => {
-    console.info(id)
+
+  handleDragEnd = (e) => {
+    this.setState({ dragging: false, draggingOver: false })
   }
 
   handleDragOver = (e) => {
     e.preventDefault()
-  }
-
-  handleDrop = (e) => {
-
   }
 
   render () {
@@ -35,15 +28,15 @@ class App extends Component {
       <div className="App">
       <h1 className='header'> Drag and Drop </h1>
       <ul className='box-container'>
-        {this.boxes.map(i => {
-          return (
-            <li
-              key={i.id}
-              className={i.id === 1 ? 'box box-colored' : 'box'}
-              onDragStart={(e) => this.handleDragStart(e, i.id)}>
-            </li>
-          )
-        })}
+        <li
+          className={this.state.dragging ? 'box invisible' : 'box box-image'}
+          draggable
+          onDragStart={this.handleDragStart}
+          onDragEnd={this.handleDragEnd}> 
+        </li>
+        <li className={this.state.draggingOver ? 'box bordered' : 'box'} onDragOver={this.handleDragOver}></li>
+          <li className={this.state.draggingOver ? 'box bordered' : 'box'}></li>
+          <li className={this.state.draggingOver ? 'box bordered' : 'box'}></li>
       </ul>
       </div>
     )
