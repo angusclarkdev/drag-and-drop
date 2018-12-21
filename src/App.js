@@ -6,37 +6,67 @@ class App extends Component {
 
   state = {
     dragging: false,
-    draggingOver: false
+    active: 0
   }
 
-  handleDragStart = () => {
+  boxes = [
+    { id: 1, label: 'box 1' },
+    { id: 2, label: 'box 2' },
+    { id: 3, label: 'box 3' },
+    { id: 4, label: 'box 4' },
+  ]
+
+  handleDragStart = e => {
+    e.persist()
     setTimeout(() => {
-      this.setState({ dragging: true, draggingOver: true })
+      this.setState({ dragging: true })
+      e.target.className += ' invisible'
     }, 10)
   }
 
   handleDragEnd = (e) => {
-    this.setState({ dragging: false, draggingOver: false })
+   this.setState({ dragging: false })
+   this.getClasses()
   }
 
   handleDragOver = (e) => {
     e.preventDefault()
+    this.setState({ active: parseInt(e.target.id) })
+    // this.getClasses()
+  }
+
+  getClasses = (id) => {
+    if (id === this.state.active && !this.state.dragging) {
+      return 'image'
+    }
+
+    if (this.state.dragging) {
+      return 'bordered'
+    } else {
+      return ''
+    }
   }
 
   render () {
+    const draggableListItems = this.boxes.map((item, i) => {
+      return (
+        <li
+          key={item.id}
+          id={i}
+          className={`box ${this.getClasses(i)}`}
+          draggable={this.state.active === i}
+          onDragStart={this.handleDragStart}
+          onDragOver={this.handleDragOver}
+          onDragEnd={this.handleDragEnd}>
+        </li>
+      )
+    })
+
     return (
       <div className="App">
       <h1 className='header'> Drag and Drop </h1>
       <ul className='box-container'>
-        <li
-          className={this.state.dragging ? 'box invisible' : 'box box-image'}
-          draggable
-          onDragStart={this.handleDragStart}
-          onDragEnd={this.handleDragEnd}> 
-        </li>
-        <li className={this.state.draggingOver ? 'box bordered' : 'box'} onDragOver={this.handleDragOver}></li>
-          <li className={this.state.draggingOver ? 'box bordered' : 'box'}></li>
-          <li className={this.state.draggingOver ? 'box bordered' : 'box'}></li>
+        {draggableListItems}
       </ul>
       </div>
     )

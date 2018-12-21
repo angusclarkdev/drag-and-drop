@@ -45,7 +45,7 @@
   margin: 25px;
 }
 
-.box-image {
+.image {
   background-image: url('http://source.unsplash.com/random/180x180');
   cursor: pointer;
 }
