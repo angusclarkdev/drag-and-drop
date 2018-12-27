@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-// import classnames from 'classnames'
 import './App.css'
 
 class App extends Component {
 
   state = {
     dragging: false,
-    active: 0
+    dragItem: 0,
+    dropItem: 0
   }
 
   boxes = [
@@ -19,24 +19,39 @@ class App extends Component {
   handleDragStart = e => {
     e.persist()
     setTimeout(() => {
-      this.setState({ dragging: true })
-      e.target.className += ' invisible'
+      this.setState({ dragging: true,  })
+      e.target.className += 'invisible'
     }, 10)
   }
 
   handleDragEnd = (e) => {
-   this.setState({ dragging: false })
-   this.getClasses()
+  this.setState({ dragging: false })
+  this.getClasses()
   }
 
+  handleDrop = (e) => {
+    this.setState(prevState => ({
+      dragging: false,
+      dragItem: prevState.dropItem
+    }))
+    this.getClasses()
+    this.swapItems()
+  }
+
+  // sets the backround image for drop target
   handleDragOver = (e) => {
     e.preventDefault()
-    this.setState({ active: parseInt(e.target.id) })
-    // this.getClasses()
+    this.setState({ dropItem: parseInt(e.target.id) })
+  }
+
+  swapItems (item) {
+    let temp = this.boxes[this.state.dragItem]
+    this.boxes[this.state.dragItem] = this.boxes[this.state.dropItem]
+    this.boxes[this.state.dropItem] = temp
   }
 
   getClasses = (id) => {
-    if (id === this.state.active && !this.state.dragging) {
+    if (id === this.state.dropItem && !this.state.dragging) {
       return 'image'
     }
 
@@ -53,11 +68,13 @@ class App extends Component {
         <li
           key={item.id}
           id={i}
-          className={`box ${this.getClasses(i)}`}
-          draggable={this.state.active === i}
+          label={item.label}
+          className={`box ${this.getClasses(i)} `}
+          draggable={this.state.dropItem === i}
           onDragStart={this.handleDragStart}
           onDragOver={this.handleDragOver}
-          onDragEnd={this.handleDragEnd}>
+          onDragEnd={this.handleDragEnd}
+          onDrop={this.handleDrop}>
         </li>
       )
     })
