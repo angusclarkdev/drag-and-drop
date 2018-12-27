@@ -55,7 +55,7 @@ class App extends Component {
       return 'image'
     }
 
-    if (this.state.dragging) {
+    if (this.state.dragging && id !== this.state.dragItem) {
       return 'bordered'
     } else {
       return ''
